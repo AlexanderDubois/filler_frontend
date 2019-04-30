@@ -11,10 +11,7 @@ import {
 } from 'react-native';
 
 import { SearchBar, ListItem } from 'react-native-elements';
-
-BASE_URL = 'http://localhost:3000'
-PRACTITIONERS_URL = BASE_URL + '/practitioners'
-
+import API from '../API'
 
 export default class HomeScreen extends React.Component {
 
@@ -24,12 +21,10 @@ export default class HomeScreen extends React.Component {
   }
 
   componentDidMount() {
-
-    fetch(PRACTITIONERS_URL)
-      .then(response => response.json())
-      .then(data => {
+    API.getPractitioners()
+      .then(practitioners => {
         this.setState({
-          practitioners: data
+          practitioners
         })}) 
   }
 
@@ -39,13 +34,20 @@ export default class HomeScreen extends React.Component {
     })
   }
 
+  moveToPractionersPage = (practitioner) => {
+    const {navigate} = this.props.navigation
+    navigate('PractitionerProfile', {practitioner: {...practitioner, averageStar: this.getAverageReview(practitioner)}})
+  }
+
   filteredPractitioners = () => {
     const {practitioners, searchTerm} = this.state
-    return practitioners.filter((practitioner) => practitioner.name.toLowerCase().includes(searchTerm.toLowerCase()))
+    return practitioners.filter((practitioner) => practitioner.name.toLowerCase().includes(searchTerm.toLowerCase()) || practitioner.address.toLowerCase().includes(searchTerm.toLowerCase()))
   }
 
   renderListItems = ({item}) => (
     <ListItem
+      button
+      onPress={() => this.moveToPractionersPage(item)}
       key={item.id}
       leftAvatar={{ source: { uri: item.profile_img } }}
       title={item.name}
@@ -59,7 +61,7 @@ export default class HomeScreen extends React.Component {
 
     let totalNumberOfStars = 0
     reviews.forEach((review) => totalNumberOfStars += review.star)
-    return (totalNumberOfStars / reviews.length)
+    return Math.round(totalNumberOfStars / reviews.length)
   }
 
   render() {
