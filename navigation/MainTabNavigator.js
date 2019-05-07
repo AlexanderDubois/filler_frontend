@@ -8,10 +8,15 @@ import LinksScreen from '../screens/LinksScreen';
 import SettingsScreen from '../screens/SettingsScreen';
 import CreateReviewScreen from '../screens/CreateReviewScreen'
 import PractitionerProfileScreen from '../screens/PractitionerProfileScreen'
+import LoginScreen from '../screens/LoginScreen'
+import SignUpScreen from '../screens/SignUpScreen'
 
 const HomeStack = createStackNavigator({
   Home: {screen: HomeScreen},
   PractitionerProfile: {screen: PractitionerProfileScreen},
+  CreateReview: {screen: CreateReviewScreen},
+  Login: {screen: LoginScreen},
+  SignUp: {screen: SignUpScreen},
 });
 
 HomeStack.navigationOptions = {
@@ -43,7 +48,7 @@ CreateStack.navigationOptions = {
 }
 
 const LinksStack = createStackNavigator({
-  Links: LinksScreen,
+  Links: LoginScreen,
 });
 
 LinksStack.navigationOptions = {

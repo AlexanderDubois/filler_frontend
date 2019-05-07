@@ -10,17 +10,23 @@ import {
   View,
 } from 'react-native';
 
+import styles from '../assets/styles'
+
 import { SearchBar, ListItem } from 'react-native-elements';
 import API from '../API'
 
-export default class HomeScreen extends React.Component {
+import { connect } from 'react-redux';
+
+class HomeScreen extends React.Component {
 
   state = {
     practitioners: [],
-    searchTerm: ""
+    searchTerm: "", 
+    token: ''
   }
 
   componentDidMount() {
+      
     API.getPractitioners()
       .then(practitioners => {
         this.setState({
@@ -69,6 +75,8 @@ export default class HomeScreen extends React.Component {
 
     return (
       <View style={styles.container}>
+        <Text h1>{this.props.user && this.props.user.email}</Text>
+        <Text h1>{this.state.token}</Text>
         <SearchBar
           placeholder="Search..."
           lightTheme
@@ -84,9 +92,10 @@ export default class HomeScreen extends React.Component {
 
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-  }
-})
+const mapStateToProps = (state) => {
+  const { user } = state
+  return { user }
+};
+
+export default connect(mapStateToProps)(HomeScreen)
+

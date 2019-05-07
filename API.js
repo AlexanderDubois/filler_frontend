@@ -3,6 +3,8 @@
 BASE_URL = 'http://localhost:3000'
 PRACTITIONERS_URL = BASE_URL + '/practitioners'
 REVIEWS_URL = BASE_URL + '/reviews'
+LOGIN_URL = BASE_URL + '/login'
+USERS_URL = BASE_URL + '/users'
 
 import * as firebase from 'firebase';
 
@@ -24,6 +26,29 @@ class API {
     static getPractitioners = () => {  
         return fetch(PRACTITIONERS_URL)
             .then(response => response.json())
+    }
+
+    static login = ({email, password}) => {
+        return fetch(LOGIN_URL, {
+            method: "POST",
+            headers: {"Content-Type": "application/json"},
+            body: JSON.stringify({email, password})
+        })
+            .then(response => response.json())
+    }
+
+    static signUp = async (user) => {
+        const {username, email, password, profile_img} = user 
+
+        const profileImageUploadURL =  await this.uploadImageAsync(profile_img.uri)
+
+        const body = {username, email, password, profile_img: profileImageUploadURL}
+
+        return fetch(USERS_URL, {
+            method: "POST",
+            headers: {"Content-Type": "application/json"},
+            body: JSON.stringify(body)
+        }).then(resp => resp.json())
     }
     
     static uploadReview = async (beforeImage, afterImage, additionalBody) => {
