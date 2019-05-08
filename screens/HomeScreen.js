@@ -40,6 +40,13 @@ class HomeScreen extends React.Component {
     })
   }
 
+  getAverageReview = (practitioner) => {
+    let total = 0
+    practitioner.reviews.forEach(review => {total += review.star})
+    if (total === 0) { return 0}
+    return Math.round(total / practitioner.reviews.length)
+  }
+
   moveToPractionersPage = (practitioner) => {
     const {navigate} = this.props.navigation
     navigate('PractitionerProfile', {practitioner: {...practitioner, averageStar: this.getAverageReview(practitioner)}})
@@ -61,22 +68,11 @@ class HomeScreen extends React.Component {
     />
   )
 
-  getAverageReview = (practitioner) => {
-    const {reviews} = practitioner
-    if (reviews.length === 0) return 0
-
-    let totalNumberOfStars = 0
-    reviews.forEach((review) => totalNumberOfStars += review.star)
-    return Math.round(totalNumberOfStars / reviews.length)
-  }
-
   render() {
     const {searchTerm} = this.state
 
     return (
       <View style={styles.container}>
-        <Text h1>{this.props.user && this.props.user.email}</Text>
-        <Text h1>{this.state.token}</Text>
         <SearchBar
           placeholder="Search..."
           lightTheme

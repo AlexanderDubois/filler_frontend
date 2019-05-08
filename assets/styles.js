@@ -7,7 +7,13 @@ const styles = StyleSheet.create({
         margin: 16,
     }, 
     formTitle: {
-        fontSize: 24,  
+        fontSize: 24, 
+        fontWeight: 'bold', 
+    },
+    loginTitle: {
+        fontSize: 38,
+        fontWeight: 'bold',
+        marginBottom: 8,
     },
     formTextInput: {
         fontSize: 18,
@@ -16,7 +22,8 @@ const styles = StyleSheet.create({
         borderColor: 'gray',
         borderWidth: 1,
         marginBottom: 8,
-        fontSize: 18
+        fontSize: 18,
+        borderRadius: 5
     }
 })
 

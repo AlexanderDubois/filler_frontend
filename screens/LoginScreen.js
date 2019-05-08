@@ -29,6 +29,10 @@ class LoginScreen extends React.Component {
     login = () => {
        API.login(this.state)
         .then(data => {
+
+            if (data.status && data.status !== 200) {
+                return alert(`Sorry, could not login in user! Please try again🧐`)
+            }
             console.log("DATA LOGIN USER: ", data.user, "WITH TOKEN:", data.token)
 
             this.props.login(data) 
@@ -49,14 +53,16 @@ class LoginScreen extends React.Component {
     render() {
 
         const {email, password} = this.state
+
+        const {loginTitle, container, formTextInput, textInputBorder} = styles
         
         return (
-            <View style={styles.container}>
-                <Text h1>Login</Text>
-                <Text style={styles.formTextInput}>Email:</Text>
-                <TextInput autoCapitalize="none" value={email} onChangeText={(text) => this.setState({email: text})} style={[{height: 60} ,styles.textInputBorder]}></TextInput>
-                <Text style={styles.formTextInput}>Password:</Text>
-                <TextInput autoCapitalize="none"value={password} onChangeText={(text) => this.setState({password: text})} secureTextEntry={true} style={[{height: 60}, styles.textInputBorder]}></TextInput>
+            <View style={container}>
+                <Text style={loginTitle}>Login</Text>
+                <Text style={formTextInput}>Email:</Text>
+                <TextInput autoCapitalize="none" value={email} onChangeText={(text) => this.setState({email: text})} style={[{height: 60} , textInputBorder]}></TextInput>
+                <Text style={formTextInput}>Password:</Text>
+                <TextInput autoCapitalize="none"value={password} onChangeText={(text) => this.setState({password: text})} secureTextEntry={true} style={[{height: 60}, textInputBorder]}></TextInput>
                 <Button onPress={this.login} title="Login"></Button>
                 <Button onPress={this.signUp} title="Don't have an account? Signup" type="clear"></Button>
             </View>

@@ -77,19 +77,25 @@ class SignUpScreen extends React.Component {
 
     render() {
         const {username, email, password, profile_img} = this.state
+        const {loginTitle, container, formTextInput, textInputBorder} = styles
 
         return(
-            <View style={styles.container}>
-                <Text h1>Signup</Text>
-                <Text style={styles.formTextInput}>Username:</Text>
-                <TextInput value={username} onChangeText={(text) => this.setState({username: text})} style={[{height: 60} ,styles.textInputBorder]}></TextInput>
-                <Text style={styles.formTextInput}>Email:</Text>
-                <TextInput value={email} onChangeText={(text) => this.setState({email: text})} style={[{height: 60} ,styles.textInputBorder]}></TextInput>
-                <Text style={styles.formTextInput}>Password:</Text>
-                <TextInput value={password} onChangeText={(text) => this.setState({password: text})} secureTextEntry={true} style={[{height: 60}, styles.textInputBorder]}></TextInput>
-                <Image source={{ uri: this.state.profile_img.uri }} style={{ flex: 1, resizeMode: 'cover'}} />
-                <Button onPress={this.checkCameraRollPermisson} title="Add profile image"/>
-                <Button onPress={this.signUp} title="Signup"></Button>
+            <View style={container}>
+                    <Text style={loginTitle}>Signup</Text>
+                    <Text style={formTextInput}>Username:</Text>
+                    <TextInput value={username} onChangeText={(text) => this.setState({username: text})} style={[{height: 60} ,textInputBorder]}></TextInput>
+                    <Text style={formTextInput}>Email:</Text>
+                    <TextInput value={email} onChangeText={(text) => this.setState({email: text})} style={[{height: 60} ,textInputBorder]}></TextInput>
+                    <Text style={formTextInput}>Password:</Text>
+                    <TextInput value={password} onChangeText={(text) => this.setState({password: text})} secureTextEntry={true} style={[{height: 60}, styles.textInputBorder]}></TextInput>
+                   
+                    <TouchableOpacity onPress={this.checkCameraRollPermisson}>
+                        <Image source={{ uri: profile_img.uri }} style={{ alignSelf: 'center',height: 150, width: 150, borderRadius: 75, resizeMode: 'cover'}} />
+                    </TouchableOpacity>
+
+                    <Button onPress={this.checkCameraRollPermisson} style={{marginTop: 20}} title="Add profile image"/>
+                    <Button onPress={this.signUp} style={{marginTop: 8}}title="Signup"></Button>
+                
             </View>
         )
     }

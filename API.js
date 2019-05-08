@@ -1,6 +1,6 @@
 
 
-BASE_URL = 'http://localhost:3000'
+BASE_URL = 'https://intense-sierra-74172.herokuapp.com'
 PRACTITIONERS_URL = BASE_URL + '/practitioners'
 REVIEWS_URL = BASE_URL + '/reviews'
 LOGIN_URL = BASE_URL + '/login'

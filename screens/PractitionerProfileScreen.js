@@ -38,10 +38,12 @@ class PractitionerProfile extends React.Component {
     renderReviewItem = ({item}) => {
         const {id, title, text, star, before_image, after_image} = item
         return (
-            <View key={id} style={{flex: 1, marginTop: 16}}>
+            <View key={id} style={{flex: 1, marginTop: 24}}>
                 <View style={{flex: 1, flexDirection: 'row'}}>
                     <Text h4 style={{flex: 3}}>{title}</Text>
                     <Rating
+                        type="rocket"
+                        ratingColor="#1bb57c"
                         imageSize={20}
                         readonly
                         startingValue={star}
@@ -70,20 +72,23 @@ class PractitionerProfile extends React.Component {
                           }}
                     />
                     <View style={styles.infoContainer}>
-                        <Text h2>{name}</Text>
-                        <Text h4>{address}</Text>
+                        <Text numberOfLines={3} style={{flex: 1, fontSize: 24, fontWeight: 'bold'}} >{name}</Text>
+                        <Text numberOfLines={3} style={{flex: 1, fontSize: 18}} >{address}</Text>
                         <Rating
                             imageSize={20}
+                            type="rocket"
+                            ratingColor="#1bb57c"
                             readonly
                             startingValue={averageStar}
+                            style={{flex: 1, alignSelf: 'flex-end'}}
                         />
-                    </View>
-                    
+                    </View> 
                 </View>
                 <Divider/>
+               
                 <View style={styles.bottomContainer}>
                     <View style={{flexDirection: 'row', marginTop: 16}}>
-                        <Text h3 style={{flex: 1}}>Reviews</Text>
+                        <Text style={{flex: 1, fontSize: 32, fontWeight: 'bold'}}>Reviews</Text>
                         <Button style={{flex: 1}} title="Add review" onPress={this.handleNewReview}/>
                     </View>
                     <FlatList
