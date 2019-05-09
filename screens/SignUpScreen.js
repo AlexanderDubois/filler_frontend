@@ -85,9 +85,9 @@ class SignUpScreen extends React.Component {
                     <Text style={formTextInput}>Username:</Text>
                     <TextInput value={username} onChangeText={(text) => this.setState({username: text})} style={[{height: 60} ,textInputBorder]}></TextInput>
                     <Text style={formTextInput}>Email:</Text>
-                    <TextInput value={email} onChangeText={(text) => this.setState({email: text})} style={[{height: 60} ,textInputBorder]}></TextInput>
+                    <TextInput autoCapitalize="none" value={email} onChangeText={(text) => this.setState({email: text})} style={[{height: 60} ,textInputBorder]}></TextInput>
                     <Text style={formTextInput}>Password:</Text>
-                    <TextInput value={password} onChangeText={(text) => this.setState({password: text})} secureTextEntry={true} style={[{height: 60}, styles.textInputBorder]}></TextInput>
+                    <TextInput autoCapitalize="none" value={password} onChangeText={(text) => this.setState({password: text})} secureTextEntry={true} style={[{height: 60}, styles.textInputBorder]}></TextInput>
                    
                     <TouchableOpacity onPress={this.checkCameraRollPermisson}>
                         <Image source={{ uri: profile_img.uri }} style={{ alignSelf: 'center',height: 150, width: 150, borderRadius: 75, resizeMode: 'cover'}} />

@@ -1,14 +1,5 @@
 import React from 'react';
-import {
-  Image,
-  Platform,
-  ScrollView,
-  FlatList,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from 'react-native';
+import { FlatList, View} from 'react-native';
 
 import styles from '../assets/styles'
 
@@ -16,6 +7,8 @@ import { SearchBar, ListItem } from 'react-native-elements';
 import API from '../API'
 
 import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+import { addCurentPractitioner } from '../actions/practitionerActions';
 
 class HomeScreen extends React.Component {
 
@@ -47,9 +40,10 @@ class HomeScreen extends React.Component {
     return Math.round(total / practitioner.reviews.length)
   }
 
-  moveToPractionersPage = (practitioner) => {
+  navigateToPractitioner = (practitioner) => {
+    this.props.addCurentPractitioner(practitioner)
     const {navigate} = this.props.navigation
-    navigate('PractitionerProfile', {practitioner: {...practitioner, averageStar: this.getAverageReview(practitioner)}})
+    navigate('PractitionerProfile')
   }
 
   filteredPractitioners = () => {
@@ -60,7 +54,7 @@ class HomeScreen extends React.Component {
   renderListItems = ({item}) => (
     <ListItem
       button
-      onPress={() => this.moveToPractionersPage(item)}
+      onPress={() => this.navigateToPractitioner(item)}
       key={item.id}
       leftAvatar={{ source: { uri: item.profile_img } }}
       title={item.name}
@@ -93,5 +87,11 @@ const mapStateToProps = (state) => {
   return { user }
 };
 
-export default connect(mapStateToProps)(HomeScreen)
+const mapDispatchToProps = dispatch => (
+  bindActionCreators({
+    addCurentPractitioner,
+  }, dispatch)
+);
+
+export default connect(mapStateToProps, mapDispatchToProps)(HomeScreen)
 

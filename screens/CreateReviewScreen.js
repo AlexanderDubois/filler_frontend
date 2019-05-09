@@ -1,17 +1,8 @@
 import React from 'react';
-import {
-  Platform,
-  ScrollView,
-  FlatList,
-  StyleSheet,
-  ActivityIndicator,
-  TouchableOpacity,
-  TouchableHighlight,
-  View,
-  TextInput,
-} from 'react-native';
 
-import { Text, ListItem, Divider, Rating, AirbnbRating, Input, Button, Image } from 'react-native-elements';
+import { ActivityIndicator, TouchableOpacity, TouchableWithoutFeedback, Keyboard, View, TextInput, Image} from 'react-native';
+
+import { Text, Rating, Button } from 'react-native-elements';
 
 import API from '../API'
 
@@ -19,6 +10,8 @@ import { ImagePicker, Permissions } from 'expo';
 import styles from '../assets/styles'
 
 import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+import { addCurentPractitioner } from '../actions/practitionerActions';
 
 const defaultImage = {uri: 'http://chittagongit.com/download/260102'}
 
@@ -46,11 +39,11 @@ class CreateReviewScreen extends React.Component {
         return (
         <View style={{flex: 1, flexDirection: 'row', height: 200, marginTop: 16}}>
             <TouchableOpacity style={{flex: 1}} onPress={this.addBeforeImage}>
-                <Image PlaceholderContent={<ActivityIndicator />} source={{ uri: this.state.beforeImage.uri }} style={{flex: 1, resizeMode: 'cover', borderRadius: 5}} />
+                <Image source={{ uri: this.state.beforeImage.uri }} style={{flex: 1, resizeMode: 'cover', borderRadius: 5}} />
             </TouchableOpacity>
             <View style={{width: 8}}></View>
             <TouchableOpacity style={{flex: 1}} onPress={this.addAfterImage}>
-                <Image PlaceholderContent={<View style={{backgroundColor: 'blue'}} />}  source={{ uri: this.state.afterImage.uri }} style={{flex: 1, resizeMode: 'cover', borderRadius: 5}} />
+                <Image source={{ uri: this.state.afterImage.uri }} style={{flex: 1, resizeMode: 'cover', borderRadius: 5}} />
             </TouchableOpacity> 
         </View>)
     }
@@ -78,6 +71,7 @@ class CreateReviewScreen extends React.Component {
 
         let result = await ImagePicker.launchImageLibraryAsync({
             aspect: [4, 3],
+            base64: true
           });
       
         if (!result.cancelled) {
@@ -97,6 +91,7 @@ class CreateReviewScreen extends React.Component {
 
         let result = await ImagePicker.launchImageLibraryAsync({
             aspect: [4, 3],
+            base64: true
           });
       
         if (!result.cancelled) {
@@ -110,6 +105,7 @@ class CreateReviewScreen extends React.Component {
         }
         let result = await ImagePicker.launchImageLibraryAsync({
             aspect: [4, 3],
+            base64: true
           });
       
         if (!result.cancelled) {
@@ -124,6 +120,7 @@ class CreateReviewScreen extends React.Component {
     uploadReview = () => {
         this.changeActivityIndicator()
         const {title, description, beforeImage, afterImage, star} = this.state
+        
 
         if (title && description && beforeImage !== defaultImage && afterImage !== defaultImage) {
             //MAKE POST REQUEST TO BACKEND
@@ -136,10 +133,11 @@ class CreateReviewScreen extends React.Component {
                         return alert("An error occured while uploading your review. Please try again 😕")
                     }
 
+                    this.props.addCurentPractitioner(data)
                     this.changeActivityIndicator()
                     console.log("REVIEW DATA", data)
 
-                    this.navigateToPractioner(data)
+                    this.navigateToPractitioner()
                 })     
         }
         else  {
@@ -147,9 +145,9 @@ class CreateReviewScreen extends React.Component {
         }
     } 
 
-    navigateToPractioner = (practitioner) => {
+    navigateToPractitioner = () => {
         const {navigate} = this.props.navigation
-        navigate('PractitionerProfile', {practitioner: {...practitioner}})
+        navigate('PractitionerProfile')
     }
 
     renderLoadingScreen = () => (
@@ -160,7 +158,8 @@ class CreateReviewScreen extends React.Component {
     )
 
     renderCreate = () => (
-        <View style={styles.container}>
+        <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
+            <View style={styles.container}>
                 <Text style={styles.formTitle}>Title</Text>
                 <TextInput value={this.state.title} onChangeText={(text) => this.setState({title: text})} multiline={true} style={[{height: 60}, styles.textInputBorder]}></TextInput>
                 <Text style={styles.formTitle}>Description</Text>
@@ -191,6 +190,8 @@ class CreateReviewScreen extends React.Component {
                 <Button onPress={this.uploadReview} title="Create review"/>
                 
             </View>
+        </TouchableWithoutFeedback>
+        
     )
 
     render() {
@@ -208,22 +209,11 @@ const mapStateToProps = (state) => {
     return { user, practitioner}
 };
 
-/*
+const mapDispatchToProps = dispatch => (
+    bindActionCreators({
+      addCurentPractitioner,
+    }, dispatch)
+  );
 
-<AirbnbRating
-                        count={5}
-                        reviews={[`🤬`, `😒`, `😐`, `😄`, `🤩`]}
-                        defaultRating={this.state.star}
-                        onFinishRating={(value) => this.setState({star: value})}
-                        size={40}
-                        style={{ flex: 1 }}
-                    />
 
-                    <Rating
-                        startingValue={this.state.star}
-                        onFinishRating={(value) => this.setState({star: value})}
-                        style={{ flex: 1 }}
-                    />
-                    */
-
-export default connect(mapStateToProps)(CreateReviewScreen)
+export default connect(mapStateToProps, mapDispatchToProps)(CreateReviewScreen)

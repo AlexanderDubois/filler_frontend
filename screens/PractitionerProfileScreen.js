@@ -1,31 +1,26 @@
 
 import React from 'react'
 
-import {
-    Image,
-    Platform,
-    ScrollView,
-    FlatList,
-    StyleSheet,
-    TouchableOpacity,
-    View,
-  } from 'react-native';
+import { Image, FlatList, StyleSheet, View} from 'react-native';
 
   import { Text, ListItem, Divider, Rating, Button } from 'react-native-elements';
 
   import { connect } from 'react-redux';
   import { bindActionCreators } from 'redux';
 import { addCurentPractitioner } from '../actions/practitionerActions';
+import API from '../API';
 
 
 class PractitionerProfile extends React.Component {
 
+
+    refreshPractitioner = () => {
+        const currentPractitioner = this.props.practitioner
+        API.getPractitioner(currentPractitioner.id)
+            .then(data => this.setState({practitioner: data}))
+    }
+
     handleNewReview = () => {
-        //If user logged in push to add review else login screen
-
-        const currentPractitioner = this.props.navigation.state.params.practitioner
-        this.props.addCurentPractitioner(currentPractitioner)
-
         const {navigate} = this.props.navigation
         console.log("CURRENT USER", this.props.user)
         if (this.props.user) {
@@ -55,12 +50,25 @@ class PractitionerProfile extends React.Component {
                     <Image source={{ uri: before_image}} style={{ flex: 1, resizeMode: 'cover'}} />
                     <Image source={{ uri: after_image}} style={{ flex: 1, resizeMode: 'cover'}} />
                 </View>
-                <Text h5>{text}</Text>
+
+                <Text style={{fontSize: 16}}>{text}</Text>
             </View>
         )
     }
+
+    getAverageReview = () => {
+        const {practitioner} = this.props
+        if (practitioner.reviews) {
+            let total = 0
+            practitioner.reviews.forEach(review => {total += review.star})
+            if (total === 0) { return 0}
+            return Math.round(total / practitioner.reviews.length)
+        }
+    }
+    
     render() {
-        const {name, address, profile_img, reviews, averageStar} = this.props.navigation.state.params.practitioner
+       
+        const {name, address, profile_img, reviews} = this.props.practitioner
 
         return (
             <View style={styles.container}>
@@ -75,11 +83,11 @@ class PractitionerProfile extends React.Component {
                         <Text numberOfLines={3} style={{flex: 1, fontSize: 24, fontWeight: 'bold'}} >{name}</Text>
                         <Text numberOfLines={3} style={{flex: 1, fontSize: 18}} >{address}</Text>
                         <Rating
-                            imageSize={20}
+                            imageSize={25}
                             type="rocket"
                             ratingColor="#1bb57c"
                             readonly
-                            startingValue={averageStar}
+                            startingValue={this.getAverageReview()}
                             style={{flex: 1, alignSelf: 'flex-end'}}
                         />
                     </View> 
@@ -129,8 +137,8 @@ const styles = StyleSheet.create({
   })
 
   const mapStateToProps = (state) => {
-    const { user } = state
-    return { user }
+    const { user, practitioner } = state
+    return { user, practitioner }
   };
 
   const mapDispatchToProps = dispatch => (

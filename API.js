@@ -37,6 +37,11 @@ class API {
             .then(response => response.json())
     }
 
+    static getPractitioner = (id) => {
+        return fetch(PRACTITIONERS_URL + `/${id}`)
+            .then(resp => resp.json())
+    }
+
     static signUp = async (user) => {
         const {username, email, password, profile_img} = user 
 
