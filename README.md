@@ -1,6 +1,6 @@
 # Filler Frontend😇
 
-An Expo React Native app to help people find better cosmetic surgens. 
+An Expo React Native app to help people find better cosmetic surgeons. 
 
 Technologies used:
 - Expo, React Native
